@@ -2,7 +2,7 @@
 
 package controller
 
-import "thingsboard-methods/pkg/controller/auth"
+import "github.com/circutor/thingsboard-methods/pkg/controller/auth"
 
 type ThingsBoardController struct {
 	Auth auth.ControllerAuth

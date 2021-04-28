@@ -2,7 +2,7 @@
 
 package auth
 
-import "thingsboard-methods/pkg/core"
+import "github.com/circutor/thingsboard-methods/pkg/core"
 
 const (
 	thingsBoard = "ThingsBoard call: %s"

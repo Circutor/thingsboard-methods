@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	core "thingsboard-methods/pkg/core"
+	core "github.com/circutor/thingsboard-methods/pkg/core"
 
 	mock "github.com/stretchr/testify/mock"
 )

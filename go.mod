@@ -1,6 +1,6 @@
 // Copyright (c) 2021 Circutor S.A. All rights reserved.
 
-module thingsboard-methods
+module github.com/circutor/thingsboard-methods
 
 go 1.15
 

@@ -5,11 +5,11 @@ package auth
 import (
 	"fmt"
 	"net/http"
-	"thingsboard-methods/pkg/core"
 
 	"github.com/circutor/common-library/pkg/data"
 	"github.com/circutor/common-library/pkg/errors"
 	"github.com/circutor/common-library/pkg/request"
+	"github.com/circutor/thingsboard-methods/pkg/core"
 )
 
 func (c ControllerAuth) Login(loginBody core.LoginBody) (int, map[string]interface{}, error) {

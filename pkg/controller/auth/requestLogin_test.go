@@ -6,9 +6,9 @@ import (
 	"encoding/json"
 	"net/http"
 	"testing"
-	"thingsboard-methods/pkg/controller/auth"
-	"thingsboard-methods/pkg/core"
 
+	"github.com/circutor/thingsboard-methods/pkg/controller/auth"
+	"github.com/circutor/thingsboard-methods/pkg/core"
 	"github.com/jbrodriguez/mlog"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
