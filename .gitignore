@@ -1,0 +1,15 @@
+# binary files
+thingsboard-methods
+*.ipk
+
+# logs
+*.log*
+
+go.sum
+vendor
+
+# VS code
+.vscode
+
+# Idea
+.idea

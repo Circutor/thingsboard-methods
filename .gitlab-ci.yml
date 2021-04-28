@@ -1,0 +1,30 @@
+default:
+  tags:
+    - golang
+
+before_script:
+  - echo "List files:" && ls -l
+  - echo "User:" && whoami
+  - echo "IDs:" && id
+  - echo "Hostname:" && hostname
+  - echo "Current directory:" && pwd
+  - echo "Go version:" && go version
+
+stages:
+  - build
+  - lint
+  - deploy
+
+build:
+  stage: build
+  script:
+    - echo "Building"
+    - make build
+
+lint:
+  stage: lint
+  script:
+    - echo "Linter"
+    - golangci-lint version
+    - golangci-lint linters
+    - golangci-lint run
