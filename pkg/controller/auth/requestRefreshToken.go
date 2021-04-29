@@ -13,15 +13,16 @@ import (
 	"github.com/circutor/thingsboard-methods/pkg/core"
 )
 
-func (c ControllerAuth) Login(loginBody core.LoginBody) (int, map[string]interface{}, error) {
-	body, err := data.BodyEncode(loginBody)
+// RefreshToken call in thingsBoard.
+func (c *ControllerAuth) RefreshToken(refreshTokenBody core.RefreshTokenBody) (int, map[string]interface{}, error) {
+	body, err := data.BodyEncode(refreshTokenBody)
 	if err != nil {
 		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
 
 		return http.StatusInternalServerError, dataError, fmt.Errorf("%w", err)
 	}
 
-	url := c.TB.URLTBServer + auth + login
+	url := c.TB.URLTBServer + auth + refreshToken
 
 	resBody, status, err := request.CreateNewRequest(http.MethodPost, url, "", body, nil)
 	if err != nil {
@@ -40,7 +41,7 @@ func (c ControllerAuth) Login(loginBody core.LoginBody) (int, map[string]interfa
 	if message, ok := responseBody["message"]; ok {
 		dataError, _ := data.ResponseDecode(errors.NewErrMessage(fmt.Sprint(message)))
 
-		return status, dataError, errors.NewErrFound(fmt.Sprint(thingsBoard), fmt.Sprint("Login ->", message))
+		return status, dataError, errors.NewErrFound(fmt.Sprint(thingsBoard), fmt.Sprint("RefreshToken ->", message))
 	}
 
 	return status, responseBody, nil

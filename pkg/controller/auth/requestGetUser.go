@@ -1,6 +1,5 @@
 // Copyright (c) 2021 Circutor S.A. All rights reserved.
 
-//nolint:dupl
 package auth
 
 import (
@@ -10,20 +9,12 @@ import (
 	"github.com/circutor/common-library/pkg/data"
 	"github.com/circutor/common-library/pkg/errors"
 	"github.com/circutor/common-library/pkg/request"
-	"github.com/circutor/thingsboard-methods/pkg/core"
 )
 
-func (c ControllerAuth) Login(loginBody core.LoginBody) (int, map[string]interface{}, error) {
-	body, err := data.BodyEncode(loginBody)
-	if err != nil {
-		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
+func (c *ControllerAuth) GetUser(token string) (int, map[string]interface{}, error) {
+	url := c.TB.URLTBServer + auth + getUser
 
-		return http.StatusInternalServerError, dataError, fmt.Errorf("%w", err)
-	}
-
-	url := c.TB.URLTBServer + auth + login
-
-	resBody, status, err := request.CreateNewRequest(http.MethodPost, url, "", body, nil)
+	resBody, status, err := request.CreateNewRequest(http.MethodGet, url, token, nil, nil)
 	if err != nil {
 		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
 
@@ -40,7 +31,7 @@ func (c ControllerAuth) Login(loginBody core.LoginBody) (int, map[string]interfa
 	if message, ok := responseBody["message"]; ok {
 		dataError, _ := data.ResponseDecode(errors.NewErrMessage(fmt.Sprint(message)))
 
-		return status, dataError, errors.NewErrFound(fmt.Sprint(thingsBoard), fmt.Sprint("Login ->", message))
+		return status, dataError, errors.NewErrFound(fmt.Sprint(thingsBoard), fmt.Sprint("GetUser ->", message))
 	}
 
 	return status, responseBody, nil
