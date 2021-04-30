@@ -1,6 +1,6 @@
 // Copyright (c) 2021 Circutor S.A. All rights reserved.
 
-package auth
+package signup
 
 import (
 	"fmt"
@@ -11,11 +11,15 @@ import (
 	"github.com/circutor/common-library/pkg/request"
 )
 
-// Logout makes a logout User Tenant.
-func (c *ControllerAuth) Logout(token string) (int, map[string]interface{}, error) {
-	url := c.TB.URLTBServer + auth + logout
+// ActivateUserByEmailCode activation user's account by email code.
+func (c *ControllerSignUp) ActivateUserByEmailCode(emailCode string) (int, map[string]interface{}, error) {
+	query := map[string]interface{}{
+		"emailCode": emailCode,
+	}
 
-	resBody, status, err := request.CreateNewRequest(http.MethodPost, url, token, nil, nil)
+	url := c.TB.URLTBServer + noauth + activateUser
+
+	resBody, status, err := request.CreateNewRequest(http.MethodPost, url, "", nil, query)
 	if err != nil {
 		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
 
@@ -33,7 +37,8 @@ func (c *ControllerAuth) Logout(token string) (int, map[string]interface{}, erro
 		if message, ok := responseBody["message"]; ok {
 			dataError, _ := data.ResponseDecode(errors.NewErrMessage(fmt.Sprint(message)))
 
-			return status, dataError, errors.NewErrFound(fmt.Sprint(thingsBoard), fmt.Sprint("Logout ->", message))
+			return status, dataError, errors.NewErrFound(
+				fmt.Sprint(thingsBoard), fmt.Sprint("ActivateUserByEmailCode ->", message))
 		}
 	}
 
