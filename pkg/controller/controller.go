@@ -4,6 +4,7 @@ package controller
 
 import (
 	"github.com/circutor/thingsboard-methods/pkg/controller/auth"
+	"github.com/circutor/thingsboard-methods/pkg/controller/customer"
 	"github.com/circutor/thingsboard-methods/pkg/controller/device"
 	deviceAPI "github.com/circutor/thingsboard-methods/pkg/controller/deviceAPI"
 	"github.com/circutor/thingsboard-methods/pkg/controller/signup"
@@ -16,6 +17,7 @@ type ThingsBoardController struct {
 	DeviceAPI deviceAPI.ControllerDeviceAPI
 	SignUp    signup.ControllerSignUp
 	User      user.ControllerUser
+	Customer  customer.ControllerCustomer
 }
 
 // NewThingsBoardController creates a new NewThingsBoardController.
@@ -26,6 +28,7 @@ func NewThingsBoardController(urlServer, userName, userPassword string) ThingsBo
 		DeviceAPI: deviceAPI.NewControllerDeviceAPI(urlServer, userName, userPassword),
 		SignUp:    signup.NewControllerSignUp(urlServer, userName, userPassword),
 		User:      user.NewControllerUser(urlServer, userName, userPassword),
+		Customer:  customer.NewControllerCustomer(urlServer, userName, userPassword),
 	}
 
 	return controller
