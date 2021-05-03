@@ -10,7 +10,7 @@ const (
 	device = "api/device"
 	// Methods.
 	credentials = "/credentials"
-	claimDevice = "/api/customer/device/"
+	claimDevice = "api/customer/device/"
 	claim       = "claim"
 )
 

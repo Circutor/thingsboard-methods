@@ -12,6 +12,7 @@ import (
 	"github.com/circutor/thingsboard-methods/pkg/core"
 )
 
+// ResetPasswordByEmail reset password by email.
 func (c *ControllerSignUp) ResetPasswordByEmail(resetPasswordByEmailBody core.ResetPasswordByEmailBody,
 	token string) (int, map[string]interface{}, error) {
 	body, err := data.BodyEncode(resetPasswordByEmailBody)
