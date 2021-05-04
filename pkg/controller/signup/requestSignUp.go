@@ -1,5 +1,6 @@
 // Copyright (c) 2021 Circutor S.A. All rights reserved.
 
+//nolint:dupl
 package signup
 
 import (
@@ -30,18 +31,20 @@ func (c *ControllerSignUp) SignUp(signUpBody core.SignUpBody) (int, map[string]i
 		return status, dataError, fmt.Errorf("%w", err)
 	}
 
-	responseBody, err := data.BodyDecode(resBody)
-	if err != nil {
-		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
+	if !(status == http.StatusOK || status == http.StatusCreated) {
+		responseBody, err := data.BodyDecode(resBody)
+		if err != nil {
+			dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
 
-		return http.StatusInternalServerError, dataError, fmt.Errorf("%w", err)
+			return http.StatusInternalServerError, dataError, fmt.Errorf("%w", err)
+		}
+
+		if message, ok := responseBody["message"]; ok {
+			dataError, _ := data.ResponseDecode(errors.NewErrMessage(fmt.Sprint(message)))
+
+			return status, dataError, errors.NewErrFound(fmt.Sprint(thingsBoard), fmt.Sprint("SignUp ->", message))
+		}
 	}
 
-	if message, ok := responseBody["message"]; ok {
-		dataError, _ := data.ResponseDecode(errors.NewErrMessage(fmt.Sprint(message)))
-
-		return status, dataError, errors.NewErrFound(fmt.Sprint(thingsBoard), fmt.Sprint("SignUp ->", message))
-	}
-
-	return status, responseBody, nil
+	return status, nil, nil
 }
