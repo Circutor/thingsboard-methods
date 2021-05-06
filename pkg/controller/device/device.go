@@ -9,9 +9,11 @@ const (
 	// Controller.
 	device = "api/device"
 	// Methods.
-	credentials = "/credentials"
-	claimDevice = "api/customer/device/"
-	claim       = "claim"
+	credentials     = "/credentials"
+	claimDevice     = "api/customer/device/"
+	claim           = "claim"
+	devicesCustomer = "api/customer/"
+	devices         = "/devices"
 )
 
 // ThingsBoardDeviceController methods call API ThingsBoard.
@@ -20,6 +22,7 @@ type ThingsBoardDeviceController interface {
 	GetDeviceCredentialsByDeviceID(deviceID, token string) (int, map[string]interface{}, error)
 	ClaimDevice(deviceName, token string, claimDeviceBody core.ClaimDeviceBody) (int, map[string]interface{}, error)
 	CreateDevice(createDeviceBody core.CreateDeviceBody, token string) (int, map[string]interface{}, error)
+	GetCustomerDevices(customerID, token string, query map[string]interface{}) (int, map[string]interface{}, error)
 }
 
 type ControllerDevice struct {

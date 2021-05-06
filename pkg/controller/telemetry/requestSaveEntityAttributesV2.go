@@ -21,7 +21,7 @@ func (c *ControllerTelemetry) SaveEntityAttributesV2(entityType, entityID, scope
 		return http.StatusInternalServerError, dataError, fmt.Errorf("%w", err)
 	}
 
-	url := c.TB.URLTBServer + telemetry + "/" + entityType + "/" + entityID + saveAttributes + scope
+	url := c.TB.URLTBServer + telemetry + entityType + "/" + entityID + saveAttributes + scope
 
 	resBody, status, err := request.CreateNewRequest(http.MethodPost, url, token, body, nil)
 	if err != nil {

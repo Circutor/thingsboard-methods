@@ -1,7 +1,6 @@
 // Copyright (c) 2021 Circutor S.A. All rights reserved.
 
-//nolint:dupl
-package telemetry
+package device
 
 import (
 	"fmt"
@@ -12,12 +11,12 @@ import (
 	"github.com/circutor/common-library/pkg/request"
 )
 
-// GetAttributeKeysByScope get keys from entity from by scope.
-func (c *ControllerTelemetry) GetAttributeKeysByScope(entityType, entityID, scope,
-	token string) (int, map[string]interface{}, error) {
-	url := c.TB.URLTBServer + telemetry + entityType + "/" + entityID + getAttributesKeys + "/" + scope
+// GetCustomerDevices get all devices from Customer User.
+func (c *ControllerDevice) GetCustomerDevices(customerID, token string,
+	query map[string]interface{}) (int, map[string]interface{}, error) {
+	url := c.TB.URLTBServer + devicesCustomer + customerID + devices
 
-	resBody, status, err := request.CreateNewRequest(http.MethodGet, url, token, nil, nil)
+	resBody, status, err := request.CreateNewRequest(http.MethodGet, url, token, nil, query)
 	if err != nil {
 		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
 
@@ -34,8 +33,7 @@ func (c *ControllerTelemetry) GetAttributeKeysByScope(entityType, entityID, scop
 	if message, ok := responseBody["message"]; ok {
 		dataError, _ := data.ResponseDecode(errors.NewErrMessage(fmt.Sprint(message)))
 
-		return status, dataError, errors.NewErrFound(
-			fmt.Sprint(thingsBoard), fmt.Sprint("GetAttributeKeysByScope ->", message))
+		return status, dataError, errors.NewErrFound(fmt.Sprint(thingsBoard), fmt.Sprint("GetCustomerDevices ->", message))
 	}
 
 	return status, responseBody, nil

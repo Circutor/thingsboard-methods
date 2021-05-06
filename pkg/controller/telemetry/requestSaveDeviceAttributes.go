@@ -21,7 +21,7 @@ func (c *ControllerTelemetry) SaveDeviceAttributes(deviceID, scope, token string
 		return http.StatusInternalServerError, dataError, fmt.Errorf("%w", err)
 	}
 
-	url := c.TB.URLTBServer + telemetry + "/" + deviceID + "/" + scope
+	url := c.TB.URLTBServer + telemetry + deviceID + "/" + scope
 
 	resBody, status, err := request.CreateNewRequest(http.MethodPost, url, token, body, nil)
 	if err != nil {

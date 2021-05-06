@@ -15,7 +15,7 @@ import (
 // GetAttributesByScope get attributes value from entity witch scope.
 func (c *ControllerTelemetry) GetAttributesByScope(entityType, entityID, scope,
 	token string, query map[string]interface{}) (int, map[string]interface{}, error) {
-	url := c.TB.URLTBServer + telemetry + "/" + entityType + "/" + entityID + getAttributesValues + "/" + scope
+	url := c.TB.URLTBServer + telemetry + entityType + "/" + entityID + getAttributesValues + "/" + scope
 
 	resBody, status, err := request.CreateNewRequest(http.MethodGet, url, token, nil, query)
 	if err != nil {

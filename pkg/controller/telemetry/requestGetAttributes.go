@@ -1,6 +1,5 @@
 // Copyright (c) 2021 Circutor S.A. All rights reserved.
 
-//nolint:dupl
 package telemetry
 
 import (
@@ -15,7 +14,7 @@ import (
 // GetAttributes get attributes value from entity.
 func (c *ControllerTelemetry) GetAttributes(entityType, entityID,
 	token string, query map[string]interface{}) (int, map[string]interface{}, error) {
-	url := c.TB.URLTBServer + telemetry + "/" + entityType + "/" + entityID + getAttributesValues
+	url := c.TB.URLTBServer + telemetry + entityType + "/" + entityID + getAttributesValues
 
 	resBody, status, err := request.CreateNewRequest(http.MethodGet, url, token, nil, query)
 	if err != nil {
