@@ -4,6 +4,7 @@ package auth_test
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"testing"
 
@@ -14,7 +15,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestLoginSuccess(t *testing.T) {
+func TestLogoutSuccess(t *testing.T) {
 	t.Parallel()
 
 	mlog.StartEx(mlog.LevelTrace, "", 0, 0)
@@ -26,38 +27,35 @@ func TestLoginSuccess(t *testing.T) {
 
 	controller := auth.NewControllerAuth(cfg.URL, cfg.Username, cfg.Password)
 
-	status, _, err := controller.Login(userLogin)
+	_, authorization, err := controller.Login(userLogin)
+	require.NoError(t, err)
+
+	status, _, err := controller.Logout(fmt.Sprintf("Bearer %v", authorization["token"]))
 	require.NoError(t, err)
 
 	assert.Equal(t, http.StatusOK, status)
 }
 
-func TestLoginFailed(t *testing.T) {
+func TestLogoutFailed(t *testing.T) {
 	t.Parallel()
 
 	mlog.StartEx(mlog.LevelTrace, "", 0, 0)
 
 	testCases := []struct {
 		name     string
-		body     core.LoginBody
 		status   int
+		token    string
 		respBody map[string]interface{}
 	}{
 		{
-			name: "Authentication failed",
-			body: core.LoginBody{
-				Username: cfg.Username,
-				Password: "",
-			},
+			name:     "Authentication failed",
+			token:    "",
 			status:   401,
 			respBody: map[string]interface{}{"message": "Authentication failed"},
 		},
 		{
-			name: "Invalid username or password",
-			body: core.LoginBody{
-				Username: cfg.Username,
-				Password: "invalid_password",
-			},
+			name:     "Invalid username or password",
+			token:    "Bearer ",
 			status:   401,
 			respBody: map[string]interface{}{"message": "Invalid username or password"},
 		},
@@ -74,7 +72,7 @@ func TestLoginFailed(t *testing.T) {
 
 			controller := auth.NewControllerAuth(cfg.URL, cfg.Username, cfg.Password)
 
-			status, message, _ := controller.Login(tc.body)
+			status, message, _ := controller.Logout(fmt.Sprintf("Bearer %v", tc.token))
 
 			messageError, err := json.Marshal(message)
 			require.NoError(t, err)

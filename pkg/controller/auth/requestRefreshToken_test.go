@@ -4,6 +4,7 @@ package auth_test
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"testing"
 
@@ -14,7 +15,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestLoginSuccess(t *testing.T) {
+func TestRefreshTokenSuccess(t *testing.T) {
 	t.Parallel()
 
 	mlog.StartEx(mlog.LevelTrace, "", 0, 0)
@@ -26,38 +27,37 @@ func TestLoginSuccess(t *testing.T) {
 
 	controller := auth.NewControllerAuth(cfg.URL, cfg.Username, cfg.Password)
 
-	status, _, err := controller.Login(userLogin)
+	_, authorization, err := controller.Login(userLogin)
+	require.NoError(t, err)
+
+	refreshTokenBody := core.NewRefreshTokenBody(fmt.Sprintf("%v", authorization["refreshToken"]))
+
+	status, _, err := controller.RefreshToken(refreshTokenBody)
 	require.NoError(t, err)
 
 	assert.Equal(t, http.StatusOK, status)
 }
 
-func TestLoginFailed(t *testing.T) {
+func TestRefreshTokenFailed(t *testing.T) {
 	t.Parallel()
 
 	mlog.StartEx(mlog.LevelTrace, "", 0, 0)
 
 	testCases := []struct {
 		name     string
-		body     core.LoginBody
 		status   int
+		body     core.RefreshTokenBody
 		respBody map[string]interface{}
 	}{
 		{
-			name: "Authentication failed",
-			body: core.LoginBody{
-				Username: cfg.Username,
-				Password: "",
-			},
+			name:     "Authentication failed",
+			body:     core.NewRefreshTokenBody(""),
 			status:   401,
 			respBody: map[string]interface{}{"message": "Authentication failed"},
 		},
 		{
-			name: "Invalid username or password",
-			body: core.LoginBody{
-				Username: cfg.Username,
-				Password: "invalid_password",
-			},
+			name:     "Invalid username or password",
+			body:     core.NewRefreshTokenBody("value"),
 			status:   401,
 			respBody: map[string]interface{}{"message": "Invalid username or password"},
 		},
@@ -74,7 +74,7 @@ func TestLoginFailed(t *testing.T) {
 
 			controller := auth.NewControllerAuth(cfg.URL, cfg.Username, cfg.Password)
 
-			status, message, _ := controller.Login(tc.body)
+			status, message, _ := controller.RefreshToken(tc.body)
 
 			messageError, err := json.Marshal(message)
 			require.NoError(t, err)

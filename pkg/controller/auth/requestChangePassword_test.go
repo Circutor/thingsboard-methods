@@ -4,7 +4,6 @@ package auth_test
 
 import (
 	"encoding/json"
-	"net/http"
 	"testing"
 
 	"github.com/circutor/thingsboard-methods/pkg/controller/auth"
@@ -14,52 +13,34 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestLoginSuccess(t *testing.T) {
-	t.Parallel()
-
-	mlog.StartEx(mlog.LevelTrace, "", 0, 0)
-
-	userLogin := core.LoginBody{
-		Username: cfg.Username,
-		Password: cfg.Password,
-	}
-
-	controller := auth.NewControllerAuth(cfg.URL, cfg.Username, cfg.Password)
-
-	status, _, err := controller.Login(userLogin)
-	require.NoError(t, err)
-
-	assert.Equal(t, http.StatusOK, status)
-}
-
-func TestLoginFailed(t *testing.T) {
+func TestChangePasswordFailed(t *testing.T) {
 	t.Parallel()
 
 	mlog.StartEx(mlog.LevelTrace, "", 0, 0)
 
 	testCases := []struct {
 		name     string
-		body     core.LoginBody
 		status   int
+		body     core.ChangePasswordBody
 		respBody map[string]interface{}
 	}{
 		{
-			name: "Authentication failed",
-			body: core.LoginBody{
-				Username: cfg.Username,
-				Password: "",
-			},
+			name:     "Authentication failed",
+			body:     core.NewChangePasswordBody("password_1", "password_2"),
 			status:   401,
 			respBody: map[string]interface{}{"message": "Authentication failed"},
 		},
 		{
-			name: "Invalid username or password",
-			body: core.LoginBody{
-				Username: cfg.Username,
-				Password: "invalid_password",
-			},
+			name:     "Authentication failed",
+			body:     core.NewChangePasswordBody("", "password_2"),
 			status:   401,
-			respBody: map[string]interface{}{"message": "Invalid username or password"},
+			respBody: map[string]interface{}{"message": "Authentication failed"},
+		},
+		{
+			name:     "Authentication failed",
+			body:     core.NewChangePasswordBody("password_1", ""),
+			status:   401,
+			respBody: map[string]interface{}{"message": "Authentication failed"},
 		},
 	}
 
@@ -74,7 +55,7 @@ func TestLoginFailed(t *testing.T) {
 
 			controller := auth.NewControllerAuth(cfg.URL, cfg.Username, cfg.Password)
 
-			status, message, _ := controller.Login(tc.body)
+			status, message, _ := controller.ChangePassword(tc.body, "")
 
 			messageError, err := json.Marshal(message)
 			require.NoError(t, err)
