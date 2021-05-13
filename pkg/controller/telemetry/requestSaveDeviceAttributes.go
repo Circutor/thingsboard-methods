@@ -6,15 +6,16 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/circutor/common-library/pkg/data"
+	common "github.com/circutor/common-library/pkg/data"
 	"github.com/circutor/common-library/pkg/errors"
 	"github.com/circutor/common-library/pkg/request"
+	"github.com/circutor/thingsboard-methods/internal/data"
 )
 
 // SaveDeviceAttributes create device attributes witch scope(server or shared).
 func (c *ControllerTelemetry) SaveDeviceAttributes(deviceID, scope, token string,
-	attributesBody map[string]interface{}) (int, map[string]interface{}, error) {
-	body, err := data.BodyEncode(attributesBody)
+	attributesBody map[string]interface{}) (int, []interface{}, error) {
+	body, err := common.BodyEncode(attributesBody)
 	if err != nil {
 		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
 
@@ -31,18 +32,10 @@ func (c *ControllerTelemetry) SaveDeviceAttributes(deviceID, scope, token string
 	}
 
 	if !(status == http.StatusOK || status == http.StatusCreated) {
-		responseBody, err := data.BodyDecode(resBody)
-		if err != nil {
-			dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
+		dataError, _ := data.ResponseDecode(errors.NewErrMessage(string(resBody)))
 
-			return http.StatusInternalServerError, dataError, fmt.Errorf("%w", err)
-		}
-
-		if message, ok := responseBody["message"]; ok {
-			dataError, _ := data.ResponseDecode(errors.NewErrMessage(fmt.Sprint(message)))
-
-			return status, dataError, errors.NewErrFound(fmt.Sprint(thingsBoard), fmt.Sprint("SaveDeviceAttributes ->", message))
-		}
+		return status, dataError, errors.NewErrFound(
+			fmt.Sprint(thingsBoard), fmt.Sprint("SaveDeviceAttributes ->", string(resBody)))
 	}
 
 	return status, nil, nil

@@ -22,6 +22,7 @@ type ThingsBoardDeviceController interface {
 	GetDeviceCredentialsByDeviceID(deviceID, token string) (int, map[string]interface{}, error)
 	ClaimDevice(deviceName, token string, claimDeviceBody core.ClaimDeviceBody) (int, map[string]interface{}, error)
 	CreateDevice(createDeviceBody core.CreateDeviceBody, token string) (int, map[string]interface{}, error)
+	DeleteDevice(deviceID, token string) (int, map[string]interface{}, error)
 	GetCustomerDevices(customerID, token string, query map[string]interface{}) (int, map[string]interface{}, error)
 }
 
