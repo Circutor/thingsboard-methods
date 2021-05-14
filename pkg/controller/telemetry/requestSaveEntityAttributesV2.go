@@ -9,7 +9,7 @@ import (
 	common "github.com/circutor/common-library/pkg/data"
 	"github.com/circutor/common-library/pkg/errors"
 	"github.com/circutor/common-library/pkg/request"
-	"github.com/circutor/thingsboard-methods/internal/data"
+	"github.com/circutor/thingsboard-methods/pkg/data"
 )
 
 // SaveEntityAttributesV2  create entity attributes witch scope(server, hared or client).

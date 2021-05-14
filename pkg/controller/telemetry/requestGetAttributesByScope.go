@@ -9,7 +9,7 @@ import (
 
 	"github.com/circutor/common-library/pkg/errors"
 	"github.com/circutor/common-library/pkg/request"
-	"github.com/circutor/thingsboard-methods/internal/data"
+	"github.com/circutor/thingsboard-methods/pkg/data"
 )
 
 // GetAttributesByScope get attributes value from entity witch scope.
