@@ -29,6 +29,9 @@ type ThingsBoardTelemetryController interface {
 		query map[string]interface{}) (int, map[string]interface{}, error)
 }
 
+//nolint:lll
+//go:generate mockery --name ThingsBoardTelemetryController --structname TelemetryControllerMock --filename TelemetryControllerMock.go
+
 type ControllerTelemetry struct {
 	TB core.ThingsBoard
 }

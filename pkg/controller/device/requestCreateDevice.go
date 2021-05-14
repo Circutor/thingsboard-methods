@@ -12,6 +12,7 @@ import (
 	"github.com/circutor/thingsboard-methods/pkg/core"
 )
 
+// CreateDevice create device in ThingsBoard platform.
 func (c *ControllerDevice) CreateDevice(createDeviceBody core.CreateDeviceBody,
 	token string) (int, map[string]interface{}, error) {
 	body, err := data.BodyEncode(createDeviceBody)
