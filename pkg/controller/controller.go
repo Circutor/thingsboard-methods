@@ -4,6 +4,7 @@ package controller
 
 import (
 	"github.com/circutor/thingsboard-methods/pkg/controller/auth"
+	"github.com/circutor/thingsboard-methods/pkg/controller/auth/mocks"
 	"github.com/circutor/thingsboard-methods/pkg/controller/customer"
 	"github.com/circutor/thingsboard-methods/pkg/controller/device"
 	deviceAPI "github.com/circutor/thingsboard-methods/pkg/controller/deviceAPI"
@@ -22,6 +23,10 @@ type ThingsBoardController struct {
 	Telemetry telemetry.ControllerTelemetry
 }
 
+type ThingsBoardControllerMock struct {
+	Auth *mocks.AuthControllerMock
+}
+
 // NewThingsBoardController creates a new NewThingsBoardController.
 func NewThingsBoardController(urlServer, userName, userPassword string) ThingsBoardController {
 	controller := ThingsBoardController{
@@ -32,6 +37,15 @@ func NewThingsBoardController(urlServer, userName, userPassword string) ThingsBo
 		User:      user.NewControllerUser(urlServer, userName, userPassword),
 		Customer:  customer.NewControllerCustomer(urlServer, userName, userPassword),
 		Telemetry: telemetry.NewControllerTelemetry(urlServer, userName, userPassword),
+	}
+
+	return controller
+}
+
+// NewThingsBoardControllerMock create a new ThingsBoardControllerMock.
+func NewThingsBoardControllerMock() ThingsBoardControllerMock {
+	controller := ThingsBoardControllerMock{
+		Auth: auth.NewControllerAuthMock(),
 	}
 
 	return controller

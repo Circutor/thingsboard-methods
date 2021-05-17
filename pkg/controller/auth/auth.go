@@ -2,7 +2,10 @@
 
 package auth
 
-import "github.com/circutor/thingsboard-methods/pkg/core"
+import (
+	"github.com/circutor/thingsboard-methods/pkg/controller/auth/mocks"
+	"github.com/circutor/thingsboard-methods/pkg/core"
+)
 
 const (
 	thingsBoard = "ThingsBoard call: %s"
@@ -38,4 +41,11 @@ func NewControllerAuth(urlServer, userName, userPassword string) ControllerAuth 
 	}
 
 	return tb
+}
+
+// NewControllerAuthMock creates a new AuthControllerMock.
+func NewControllerAuthMock() *mocks.AuthControllerMock {
+	mock := new(mocks.AuthControllerMock)
+
+	return mock
 }
