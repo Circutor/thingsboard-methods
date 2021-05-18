@@ -15,11 +15,14 @@ type ThingsBoardUserController interface {
 	SaveUser(saveUserBody core.SaveUserBody, token string) (int, map[string]interface{}, error)
 }
 
+//nolint:lll
+//go:generate mockery --name ThingsBoardUserController --structname ThingsBoardUserControllerMock --filename ThingsBoardUserControllerMock.go
+
 type ControllerUser struct {
 	TB core.ThingsBoard
 }
 
-// NewControllerSignUp creates a new ThingsBoardUserController.
+// NewControllerUser creates a new ThingsBoardUserController.
 func NewControllerUser(urlServer, userName, userPassword string) ControllerUser {
 	tb := ControllerUser{
 		TB: core.NewThingsBoard(urlServer, userName, userPassword),

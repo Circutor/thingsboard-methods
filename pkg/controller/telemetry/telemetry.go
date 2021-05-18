@@ -30,7 +30,7 @@ type ThingsBoardTelemetryController interface {
 }
 
 //nolint:lll
-//go:generate mockery --name ThingsBoardTelemetryController --structname TelemetryControllerMock --filename TelemetryControllerMock.go
+//go:generate mockery --name ThingsBoardTelemetryController --structname ThingsBoardTelemetryControllerMock --filename ThingsBoardTelemetryControllerMock.go
 
 type ControllerTelemetry struct {
 	TB core.ThingsBoard

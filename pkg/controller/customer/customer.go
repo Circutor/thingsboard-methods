@@ -19,6 +19,9 @@ type ThingsBoardCustomerController interface {
 	GetTenantCustomer(email, token string) (int, map[string]interface{}, error)
 }
 
+//nolint:lll
+//go:generate mockery --name ThingsBoardCustomerController --structname ThingsBoardCustomerControllerMock --filename ThingsBoardCustomerControllerMock.go
+
 type ControllerCustomer struct {
 	TB core.ThingsBoard
 }

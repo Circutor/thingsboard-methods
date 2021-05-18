@@ -27,6 +27,9 @@ type ThingsBoardDeviceController interface {
 	GetCustomerDevices(customerID, token string, query map[string]interface{}) (int, map[string]interface{}, error)
 }
 
+//nolint:lll
+//go:generate mockery --name ThingsBoardDeviceController --structname ThingsBoardDeviceControllerMock --filename ThingsBoardDeviceControllerMock.go
+
 type ControllerDevice struct {
 	TB core.ThingsBoard
 }

@@ -3,7 +3,6 @@
 package auth
 
 import (
-	"github.com/circutor/thingsboard-methods/pkg/controller/auth/mocks"
 	"github.com/circutor/thingsboard-methods/pkg/core"
 )
 
@@ -28,7 +27,8 @@ type ThingsBoardAuthController interface {
 	ChangePassword(changePasswordBody core.ChangePasswordBody, token string) (int, map[string]interface{}, error)
 }
 
-//go:generate mockery --name ThingsBoardAuthController --structname AuthControllerMock --filename AuthControllerMock.go
+//nolint:lll
+//go:generate mockery --name ThingsBoardAuthController --structname ThingsBoardAuthControllerMock --filename ThingsBoardAuthControllerMock.go
 
 type ControllerAuth struct {
 	TB core.ThingsBoard
@@ -41,11 +41,4 @@ func NewControllerAuth(urlServer, userName, userPassword string) ControllerAuth 
 	}
 
 	return tb
-}
-
-// NewControllerAuthMock creates a new AuthControllerMock.
-func NewControllerAuthMock() *mocks.AuthControllerMock {
-	mock := new(mocks.AuthControllerMock)
-
-	return mock
 }

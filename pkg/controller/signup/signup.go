@@ -24,6 +24,9 @@ type ThingsBoardSignUpController interface {
 	ResetPassword(resetPasswordBody core.ResetPasswordBody) (int, map[string]interface{}, error)
 }
 
+//nolint:lll
+//go:generate mockery --name ThingsBoardSignUpController --structname ThingsBoardSignUpControllerMock --filename ThingsBoardSignUpControllerMock.go
+
 type ControllerSignUp struct {
 	TB core.ThingsBoard
 }

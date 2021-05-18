@@ -18,6 +18,9 @@ type ThingsBoardDeviceAPIController interface {
 	GetDeviceAttributes(deviceToken string, query map[string]interface{}) (int, map[string]interface{}, error)
 }
 
+//nolint:lll
+//go:generate mockery --name ThingsBoardDeviceAPIController --structname ThingsBoardDeviceAPIControllerMock --filename ThingsBoardDeviceAPIControllerMock.go
+
 type ControllerDeviceAPI struct {
 	TB core.ThingsBoard
 }
