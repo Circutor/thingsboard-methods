@@ -193,6 +193,36 @@ func (_m *ThingsBoardDeviceControllerMock) GetDeviceCredentialsByDeviceID(device
 	return r0, r1, r2
 }
 
+// GetTenantDevice provides a mock function with given fields: deviceName, token
+func (_m *ThingsBoardDeviceControllerMock) GetTenantDevice(deviceName string, token string) (int, map[string]interface{}, error) {
+	ret := _m.Called(deviceName, token)
+
+	var r0 int
+	if rf, ok := ret.Get(0).(func(string, string) int); ok {
+		r0 = rf(deviceName, token)
+	} else {
+		r0 = ret.Get(0).(int)
+	}
+
+	var r1 map[string]interface{}
+	if rf, ok := ret.Get(1).(func(string, string) map[string]interface{}); ok {
+		r1 = rf(deviceName, token)
+	} else {
+		if ret.Get(1) != nil {
+			r1 = ret.Get(1).(map[string]interface{})
+		}
+	}
+
+	var r2 error
+	if rf, ok := ret.Get(2).(func(string, string) error); ok {
+		r2 = rf(deviceName, token)
+	} else {
+		r2 = ret.Error(2)
+	}
+
+	return r0, r1, r2
+}
+
 // ReClaimDevice provides a mock function with given fields: deviceName, token
 func (_m *ThingsBoardDeviceControllerMock) ReClaimDevice(deviceName string, token string) (int, map[string]interface{}, error) {
 	ret := _m.Called(deviceName, token)

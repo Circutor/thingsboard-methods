@@ -14,6 +14,7 @@ const (
 	claim           = "claim"
 	devicesCustomer = "api/customer/"
 	devices         = "/devices"
+	devicesName     = "api/tenant/devices"
 )
 
 // ThingsBoardDeviceController methods call API ThingsBoard.
@@ -25,6 +26,7 @@ type ThingsBoardDeviceController interface {
 	CreateDevice(createDeviceBody core.CreateDeviceBody, token string) (int, map[string]interface{}, error)
 	DeleteDevice(deviceID, token string) (int, map[string]interface{}, error)
 	GetCustomerDevices(customerID, token string, query map[string]interface{}) (int, map[string]interface{}, error)
+	GetTenantDevice(deviceName, token string) (int, map[string]interface{}, error)
 }
 
 //nolint:lll
