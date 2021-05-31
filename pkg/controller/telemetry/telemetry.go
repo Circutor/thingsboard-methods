@@ -12,6 +12,7 @@ const (
 	saveAttributes      = "/attributes/"
 	getAttributesKeys   = "/keys/attributes"
 	getAttributesValues = "/values/attributes"
+	getTimeseriesValues = "/values/timeseries"
 )
 
 // ThingsBoardTelemetryController methods call API ThingsBoard.
@@ -26,6 +27,10 @@ type ThingsBoardTelemetryController interface {
 	GetAttributesByScope(entityType, entityID, scope, token string,
 		query map[string]interface{}) (int, []interface{}, error)
 	DeleteEntityAttributes(entityType, entityID, scope, token string,
+		query map[string]interface{}) (int, map[string]interface{}, error)
+	GetLatestTimeseries(entityType, entityID, token string,
+		query map[string]interface{}) (int, map[string]interface{}, error)
+	GetTimeseries(entityType, entityID, token string,
 		query map[string]interface{}) (int, map[string]interface{}, error)
 }
 
