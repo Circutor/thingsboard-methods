@@ -1,5 +1,6 @@
 // Copyright (c) 2021 Circutor S.A. All rights reserved.
 
+//nolint:dupl
 package deviceapi
 
 import (
@@ -12,10 +13,15 @@ import (
 )
 
 func (c *ControllerDeviceAPI) PostTelemetry(deviceToken string,
-	query map[string]interface{}) (int, map[string]interface{}, error) {
+	attrBody interface{}) (int, map[string]interface{}, error) {
+	body, err := data.BodyEncode(attrBody)
+	if err != nil {
+		return http.StatusInternalServerError, nil, fmt.Errorf("%w", err)
+	}
+
 	url := c.TB.URLTBServer + deviceAPI + "/" + deviceToken + telemetry
 
-	resBody, status, err := request.CreateNewRequest(http.MethodPost, url, "", nil, query)
+	resBody, status, err := request.CreateNewRequest(http.MethodPost, url, "", body, nil)
 	if err != nil {
 		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
 

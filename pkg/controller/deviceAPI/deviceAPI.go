@@ -17,7 +17,7 @@ const (
 type ThingsBoardDeviceAPIController interface {
 	PostDeviceAttributes(deviceToken string, attrBody interface{}) (int, map[string]interface{}, error)
 	GetDeviceAttributes(deviceToken string, query map[string]interface{}) (int, map[string]interface{}, error)
-	PostTelemetry(deviceToken string, query map[string]interface{}) (int, map[string]interface{}, error)
+	PostTelemetry(deviceToken string, attrBody interface{}) (int, map[string]interface{}, error)
 }
 
 //nolint:lll
