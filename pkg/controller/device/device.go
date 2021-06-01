@@ -13,6 +13,7 @@ const (
 	claimDevice     = "api/customer/device/"
 	claim           = "claim"
 	devicesCustomer = "api/customer/"
+	devicesGroup    = "api/entityGroup/"
 	devices         = "/devices"
 	devicesName     = "api/tenant/devices"
 )
@@ -27,6 +28,8 @@ type ThingsBoardDeviceController interface {
 	DeleteDevice(deviceID, token string) (int, map[string]interface{}, error)
 	GetCustomerDevices(customerID, token string, query map[string]interface{}) (int, map[string]interface{}, error)
 	GetTenantDevice(deviceName, token string) (int, map[string]interface{}, error)
+	GetDevicesByEntityGroupID(entityGroupID, token string,
+		query map[string]interface{}) (int, map[string]interface{}, error)
 }
 
 //nolint:lll

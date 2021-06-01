@@ -12,10 +12,10 @@ import (
 	"github.com/circutor/common-library/pkg/request"
 )
 
-// GetCustomerDevices get all devices from Customer User.
-func (c *ControllerDevice) GetCustomerDevices(customerID, token string,
+// GetDevicesByEntityGroupID get devices from EntityGroupId.
+func (c *ControllerDevice) GetDevicesByEntityGroupID(entityGroupID, token string,
 	query map[string]interface{}) (int, map[string]interface{}, error) {
-	url := c.TB.URLTBServer + devicesCustomer + customerID + devices
+	url := c.TB.URLTBServer + devicesGroup + entityGroupID + devices
 
 	resBody, status, err := request.CreateNewRequest(http.MethodGet, url, token, nil, query)
 	if err != nil {
@@ -34,7 +34,8 @@ func (c *ControllerDevice) GetCustomerDevices(customerID, token string,
 	if message, ok := responseBody["message"]; ok {
 		dataError, _ := data.ResponseDecode(errors.NewErrMessage(fmt.Sprint(message)))
 
-		return status, dataError, errors.NewErrFound(fmt.Sprint(thingsBoard), fmt.Sprint("GetCustomerDevices ->", message))
+		return status, dataError, errors.NewErrFound(
+			fmt.Sprint(thingsBoard), fmt.Sprint("GetDevicesByEntityGroupId ->", message))
 	}
 
 	return status, responseBody, nil
