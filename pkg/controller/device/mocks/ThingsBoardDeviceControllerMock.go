@@ -43,20 +43,20 @@ func (_m *ThingsBoardDeviceControllerMock) ClaimDevice(deviceName string, token 
 	return r0, r1, r2
 }
 
-// CreateDevice provides a mock function with given fields: createDeviceBody, token
-func (_m *ThingsBoardDeviceControllerMock) CreateDevice(createDeviceBody core.CreateDeviceBody, token string) (int, map[string]interface{}, error) {
-	ret := _m.Called(createDeviceBody, token)
+// CreateDevice provides a mock function with given fields: createDeviceBody, token, query
+func (_m *ThingsBoardDeviceControllerMock) CreateDevice(createDeviceBody core.CreateDeviceBody, token string, query map[string]interface{}) (int, map[string]interface{}, error) {
+	ret := _m.Called(createDeviceBody, token, query)
 
 	var r0 int
-	if rf, ok := ret.Get(0).(func(core.CreateDeviceBody, string) int); ok {
-		r0 = rf(createDeviceBody, token)
+	if rf, ok := ret.Get(0).(func(core.CreateDeviceBody, string, map[string]interface{}) int); ok {
+		r0 = rf(createDeviceBody, token, query)
 	} else {
 		r0 = ret.Get(0).(int)
 	}
 
 	var r1 map[string]interface{}
-	if rf, ok := ret.Get(1).(func(core.CreateDeviceBody, string) map[string]interface{}); ok {
-		r1 = rf(createDeviceBody, token)
+	if rf, ok := ret.Get(1).(func(core.CreateDeviceBody, string, map[string]interface{}) map[string]interface{}); ok {
+		r1 = rf(createDeviceBody, token, query)
 	} else {
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).(map[string]interface{})
@@ -64,8 +64,8 @@ func (_m *ThingsBoardDeviceControllerMock) CreateDevice(createDeviceBody core.Cr
 	}
 
 	var r2 error
-	if rf, ok := ret.Get(2).(func(core.CreateDeviceBody, string) error); ok {
-		r2 = rf(createDeviceBody, token)
+	if rf, ok := ret.Get(2).(func(core.CreateDeviceBody, string, map[string]interface{}) error); ok {
+		r2 = rf(createDeviceBody, token, query)
 	} else {
 		r2 = ret.Error(2)
 	}

@@ -13,8 +13,8 @@ import (
 )
 
 // CreateDevice create device in ThingsBoard platform.
-func (c *ControllerDevice) CreateDevice(createDeviceBody core.CreateDeviceBody,
-	token string) (int, map[string]interface{}, error) {
+func (c *ControllerDevice) CreateDevice(createDeviceBody core.CreateDeviceBody, token string,
+	query map[string]interface{}) (int, map[string]interface{}, error) {
 	body, err := data.BodyEncode(createDeviceBody)
 	if err != nil {
 		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
@@ -24,7 +24,7 @@ func (c *ControllerDevice) CreateDevice(createDeviceBody core.CreateDeviceBody,
 
 	url := c.TB.URLTBServer + device
 
-	resBody, status, err := request.CreateNewRequest(http.MethodPost, url, token, body, nil)
+	resBody, status, err := request.CreateNewRequest(http.MethodPost, url, token, body, query)
 	if err != nil {
 		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
 

@@ -11,6 +11,8 @@ import (
 	deviceMock "github.com/circutor/thingsboard-methods/pkg/controller/device/mocks"
 	deviceAPI "github.com/circutor/thingsboard-methods/pkg/controller/deviceAPI"
 	deviceAPIMock "github.com/circutor/thingsboard-methods/pkg/controller/deviceAPI/mocks"
+	entityGroup "github.com/circutor/thingsboard-methods/pkg/controller/entityGroup"
+	EntityGroupMock "github.com/circutor/thingsboard-methods/pkg/controller/entityGroup/mocks"
 	"github.com/circutor/thingsboard-methods/pkg/controller/signup"
 	SignUpMock "github.com/circutor/thingsboard-methods/pkg/controller/signup/mocks"
 	"github.com/circutor/thingsboard-methods/pkg/controller/telemetry"
@@ -20,13 +22,14 @@ import (
 )
 
 type ThingsBoardController struct {
-	Auth      auth.ThingsBoardAuthController
-	Device    device.ThingsBoardDeviceController
-	DeviceAPI deviceAPI.ThingsBoardDeviceAPIController
-	SignUp    signup.ThingsBoardSignUpController
-	User      user.ThingsBoardUserController
-	Customer  customer.ThingsBoardCustomerController
-	Telemetry telemetry.ThingsBoardTelemetryController
+	Auth        auth.ThingsBoardAuthController
+	Device      device.ThingsBoardDeviceController
+	DeviceAPI   deviceAPI.ThingsBoardDeviceAPIController
+	SignUp      signup.ThingsBoardSignUpController
+	User        user.ThingsBoardUserController
+	Customer    customer.ThingsBoardCustomerController
+	Telemetry   telemetry.ThingsBoardTelemetryController
+	EntityGroup entityGroup.ThingsBoardEntityGroupController
 }
 
 // NewThingsBoardController creates a new ThingsBoardController.
@@ -38,15 +41,17 @@ func NewThingsBoardController(urlServer, userName, userPassword string) ThingsBo
 	userController := user.NewControllerUser(urlServer, userName, userPassword)
 	customerController := customer.NewControllerCustomer(urlServer, userName, userPassword)
 	telemetryController := telemetry.NewControllerTelemetry(urlServer, userName, userPassword)
+	entityGroup := entityGroup.NewControllerEntityGroup(urlServer, userName, userPassword)
 
 	controller := ThingsBoardController{
-		Auth:      &authController,
-		Device:    &deviceController,
-		DeviceAPI: &deviceAPIController,
-		SignUp:    &signUpController,
-		User:      &userController,
-		Customer:  &customerController,
-		Telemetry: &telemetryController,
+		Auth:        &authController,
+		Device:      &deviceController,
+		DeviceAPI:   &deviceAPIController,
+		SignUp:      &signUpController,
+		User:        &userController,
+		Customer:    &customerController,
+		Telemetry:   &telemetryController,
+		EntityGroup: &entityGroup,
 	}
 
 	return controller
@@ -55,18 +60,23 @@ func NewThingsBoardController(urlServer, userName, userPassword string) ThingsBo
 //nolint:interfacer
 // NewThingsBoardControllerMock creates a new ThingsBoardController.
 func NewThingsBoardControllerMock(
-	auth *AuthMock.ThingsBoardAuthControllerMock, device *deviceMock.ThingsBoardDeviceControllerMock,
-	deviceAPI *deviceAPIMock.ThingsBoardDeviceAPIControllerMock, signUp *SignUpMock.ThingsBoardSignUpControllerMock,
-	user *UserMock.ThingsBoardUserControllerMock, customer *CustomerMock.ThingsBoardCustomerControllerMock,
-	telemetry *TelemetryMock.ThingsBoardTelemetryControllerMock) ThingsBoardController {
+	auth *AuthMock.ThingsBoardAuthControllerMock,
+	device *deviceMock.ThingsBoardDeviceControllerMock,
+	deviceAPI *deviceAPIMock.ThingsBoardDeviceAPIControllerMock,
+	signUp *SignUpMock.ThingsBoardSignUpControllerMock,
+	user *UserMock.ThingsBoardUserControllerMock,
+	customer *CustomerMock.ThingsBoardCustomerControllerMock,
+	telemetry *TelemetryMock.ThingsBoardTelemetryControllerMock,
+	entityGroup *EntityGroupMock.ThingsBoardEntityGroupControllerMock) ThingsBoardController {
 	controller := ThingsBoardController{
-		Auth:      auth,
-		Device:    device,
-		DeviceAPI: deviceAPI,
-		SignUp:    signUp,
-		User:      user,
-		Customer:  customer,
-		Telemetry: telemetry,
+		Auth:        auth,
+		Device:      device,
+		DeviceAPI:   deviceAPI,
+		SignUp:      signUp,
+		User:        user,
+		Customer:    customer,
+		Telemetry:   telemetry,
+		EntityGroup: entityGroup,
 	}
 
 	return controller
