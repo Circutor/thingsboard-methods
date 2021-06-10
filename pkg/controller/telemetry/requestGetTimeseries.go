@@ -12,6 +12,7 @@ import (
 	"github.com/circutor/common-library/pkg/request"
 )
 
+// GetTimeseries get interval period of values time series.
 func (c *ControllerTelemetry) GetTimeseries(entityType, entityID, token string,
 	query map[string]interface{}) (int, map[string]interface{}, error) {
 	url := c.TB.URLTBServer + telemetry + entityType + "/" + entityID + getTimeseriesValues
@@ -23,17 +24,18 @@ func (c *ControllerTelemetry) GetTimeseries(entityType, entityID, token string,
 		return status, dataError, fmt.Errorf("%w", err)
 	}
 
+	if !(status == http.StatusOK || status == http.StatusCreated) {
+		dataError, _ := data.ResponseDecode(errors.NewErrMessage(string(resBody)))
+
+		return status, dataError, errors.NewErrFound(
+			fmt.Sprint(thingsBoard), fmt.Sprint("GetLatestTimeseries ->", string(resBody)))
+	}
+
 	responseBody, err := data.BodyDecode(resBody)
 	if err != nil {
 		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
 
 		return http.StatusInternalServerError, dataError, fmt.Errorf("%w", err)
-	}
-
-	if message, ok := responseBody["message"]; ok {
-		dataError, _ := data.ResponseDecode(errors.NewErrMessage(fmt.Sprint(message)))
-
-		return status, dataError, errors.NewErrFound(fmt.Sprint(thingsBoard), fmt.Sprint("GetTimeseries ->", message))
 	}
 
 	return status, responseBody, nil

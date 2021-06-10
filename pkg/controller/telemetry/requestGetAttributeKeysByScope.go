@@ -1,6 +1,5 @@
 // Copyright (c) 2021 Circutor S.A. All rights reserved.
 
-//nolint:dupl
 package telemetry
 
 import (

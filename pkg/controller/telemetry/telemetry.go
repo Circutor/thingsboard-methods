@@ -29,7 +29,7 @@ type ThingsBoardTelemetryController interface {
 	DeleteEntityAttributes(entityType, entityID, scope, token string,
 		query map[string]interface{}) (int, map[string]interface{}, error)
 	GetLatestTimeseries(entityType, entityID, token string,
-		query map[string]interface{}) (int, map[string]interface{}, error)
+		query map[string]interface{}) (int, []interface{}, error)
 	GetTimeseries(entityType, entityID, token string,
 		query map[string]interface{}) (int, map[string]interface{}, error)
 }

@@ -7,13 +7,14 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/circutor/common-library/pkg/data"
 	"github.com/circutor/common-library/pkg/errors"
 	"github.com/circutor/common-library/pkg/request"
+	"github.com/circutor/thingsboard-methods/pkg/data"
 )
 
+// GetLatestTimeseries get values last time series.
 func (c *ControllerTelemetry) GetLatestTimeseries(entityType, entityID, token string,
-	query map[string]interface{}) (int, map[string]interface{}, error) {
+	query map[string]interface{}) (int, []interface{}, error) {
 	url := c.TB.URLTBServer + telemetry + entityType + "/" + entityID + getTimeseriesValues
 
 	resBody, status, err := request.CreateNewRequest(http.MethodGet, url, token, nil, query)
@@ -23,17 +24,18 @@ func (c *ControllerTelemetry) GetLatestTimeseries(entityType, entityID, token st
 		return status, dataError, fmt.Errorf("%w", err)
 	}
 
+	if !(status == http.StatusOK || status == http.StatusCreated) {
+		dataError, _ := data.ResponseDecode(errors.NewErrMessage(string(resBody)))
+
+		return status, dataError, errors.NewErrFound(
+			fmt.Sprint(thingsBoard), fmt.Sprint("GetLatestTimeseries ->", string(resBody)))
+	}
+
 	responseBody, err := data.BodyDecode(resBody)
 	if err != nil {
 		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
 
 		return http.StatusInternalServerError, dataError, fmt.Errorf("%w", err)
-	}
-
-	if message, ok := responseBody["message"]; ok {
-		dataError, _ := data.ResponseDecode(errors.NewErrMessage(fmt.Sprint(message)))
-
-		return status, dataError, errors.NewErrFound(fmt.Sprint(thingsBoard), fmt.Sprint("GetLatestTimeseries ->", message))
 	}
 
 	return status, responseBody, nil
