@@ -7,7 +7,8 @@ import "github.com/circutor/thingsboard-methods/pkg/core"
 const (
 	thingsBoard = "ThingsBoard call: %s"
 	// Controller.
-	customer = "api/customer"
+	customer  = "api/customer"
+	customers = "api/customers"
 	// Methods.
 	getTenantCustomer = "api/tenant/customers"
 )
@@ -17,6 +18,7 @@ type ThingsBoardCustomerController interface {
 	SaveCustomer(saveCustomerBody core.SaveCustomerBody, token string) (int, map[string]interface{}, error)
 	GetCustomerByID(id, token string) (int, map[string]interface{}, error)
 	GetTenantCustomer(email, token string) (int, map[string]interface{}, error)
+	GetCustomers(token string, query map[string]interface{}) (int, map[string]interface{}, error)
 }
 
 //nolint:lll
