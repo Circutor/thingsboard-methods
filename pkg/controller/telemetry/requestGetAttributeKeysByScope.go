@@ -8,8 +8,6 @@ import (
 	"net/http"
 
 	"github.com/circutor/common-library/pkg/errors"
-	"github.com/circutor/common-library/pkg/request"
-	"github.com/circutor/thingsboard-methods/pkg/data"
 )
 
 // GetAttributeKeysByScope get keys from entity from by scope.
@@ -17,23 +15,23 @@ func (c *ControllerTelemetry) GetAttributeKeysByScope(entityType, entityID, scop
 	token string) (int, []interface{}, error) {
 	url := c.TB.URLTBServer + telemetry + entityType + "/" + entityID + getAttributesKeys + "/" + scope
 
-	resBody, status, err := request.CreateNewRequest(http.MethodGet, url, token, nil, nil)
+	resBody, status, err := c.Request.CreateNewRequest(http.MethodGet, url, token, nil, nil)
 	if err != nil {
-		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
+		dataError, _ := c.Data.ResponseDecodeToArray(errors.NewErrMessage(err.Error()))
 
 		return status, dataError, fmt.Errorf("%w", err)
 	}
 
 	if !(status == http.StatusOK || status == http.StatusCreated) {
-		dataError, _ := data.ResponseDecode(errors.NewErrMessage(string(resBody)))
+		dataError, _ := c.Data.ResponseDecodeToArray(errors.NewErrMessage(string(resBody)))
 
 		return status, dataError, errors.NewErrFound(
 			fmt.Sprint(thingsBoard), fmt.Sprint("GetAttributeKeysByScope ->", string(resBody)))
 	}
 
-	responseBody, err := data.BodyDecode(resBody)
+	responseBody, err := c.Data.BodyDecodeToArray(resBody)
 	if err != nil {
-		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
+		dataError, _ := c.Data.ResponseDecodeToArray(errors.NewErrMessage(err.Error()))
 
 		return http.StatusInternalServerError, dataError, fmt.Errorf("%w", err)
 	}

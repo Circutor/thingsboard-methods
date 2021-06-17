@@ -3,6 +3,10 @@
 package auth
 
 import (
+	"github.com/circutor/common-library/pkg/data"
+	dataMock "github.com/circutor/common-library/pkg/data/mocks"
+	"github.com/circutor/common-library/pkg/request"
+	requestMock "github.com/circutor/common-library/pkg/request/mocks"
 	"github.com/circutor/thingsboard-methods/pkg/core"
 )
 
@@ -31,14 +35,30 @@ type ThingsBoardAuthController interface {
 //go:generate mockery --name ThingsBoardAuthController --structname ThingsBoardAuthControllerMock --filename ThingsBoardAuthControllerMock.go
 
 type ControllerAuth struct {
-	TB core.ThingsBoard
+	TB      core.ThingsBoard
+	Data    data.InterfaceData
+	Request request.InterfaceRequest
 }
 
 // NewControllerAuth creates a new ThingsBoardAuthController.
 func NewControllerAuth(urlServer, userName, userPassword string) ControllerAuth {
-	tb := ControllerAuth{
-		TB: core.NewThingsBoard(urlServer, userName, userPassword),
-	}
+	dataLib := data.NewData()
+	requestLib := request.NewRequest()
 
-	return tb
+	return ControllerAuth{
+		TB:      core.NewThingsBoard(urlServer, userName, userPassword),
+		Data:    &dataLib,
+		Request: &requestLib,
+	}
+}
+
+//nolint:interfacer
+// NewControllerAuthMock creates a new ThingsBoardAuthController.
+func NewControllerAuthMock(urlServer, userName, userPassword string,
+	data *dataMock.InterfaceDataMock, request *requestMock.InterfaceRequestMock) ControllerAuth {
+	return ControllerAuth{
+		TB:      core.NewThingsBoard(urlServer, userName, userPassword),
+		Data:    data,
+		Request: request,
+	}
 }

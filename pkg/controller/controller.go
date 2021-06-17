@@ -43,7 +43,7 @@ func NewThingsBoardController(urlServer, userName, userPassword string) ThingsBo
 	telemetryController := telemetry.NewControllerTelemetry(urlServer, userName, userPassword)
 	entityGroup := entityGroup.NewControllerEntityGroup(urlServer, userName, userPassword)
 
-	controller := ThingsBoardController{
+	return ThingsBoardController{
 		Auth:        &authController,
 		Device:      &deviceController,
 		DeviceAPI:   &deviceAPIController,
@@ -53,8 +53,6 @@ func NewThingsBoardController(urlServer, userName, userPassword string) ThingsBo
 		Telemetry:   &telemetryController,
 		EntityGroup: &entityGroup,
 	}
-
-	return controller
 }
 
 //nolint:interfacer
@@ -68,7 +66,7 @@ func NewThingsBoardControllerMock(
 	customer *CustomerMock.ThingsBoardCustomerControllerMock,
 	telemetry *TelemetryMock.ThingsBoardTelemetryControllerMock,
 	entityGroup *EntityGroupMock.ThingsBoardEntityGroupControllerMock) ThingsBoardController {
-	controller := ThingsBoardController{
+	return ThingsBoardController{
 		Auth:        auth,
 		Device:      device,
 		DeviceAPI:   deviceAPI,
@@ -78,6 +76,4 @@ func NewThingsBoardControllerMock(
 		Telemetry:   telemetry,
 		EntityGroup: entityGroup,
 	}
-
-	return controller
 }
