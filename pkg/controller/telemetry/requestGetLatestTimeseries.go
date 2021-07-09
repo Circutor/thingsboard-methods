@@ -22,11 +22,24 @@ func (c *ControllerTelemetry) GetLatestTimeseries(entityType, entityID, token st
 		return status, dataError, fmt.Errorf("%w", err)
 	}
 
-	if !(status == http.StatusOK || status == http.StatusCreated) {
-		dataError, _ := c.Data.ResponseDecodeToMap(errors.NewErrMessage(string(resBody)))
-
-		return status, dataError, errors.NewErrFound(
+	if status == http.StatusForbidden || status == http.StatusNotFound {
+		return status, map[string]interface{}{"message": string(resBody)}, errors.NewErrFound(
 			fmt.Sprint(thingsBoard), fmt.Sprint("GetLatestTimeseries ->", string(resBody)))
+	}
+
+	if !(status == http.StatusOK || status == http.StatusCreated) {
+		responseBody, err := c.Data.BodyDecodeToMap(resBody)
+		if err != nil {
+			dataError, _ := c.Data.ResponseDecodeToMap(errors.NewErrMessage(err.Error()))
+
+			return http.StatusInternalServerError, dataError, fmt.Errorf("%w", err)
+		}
+
+		if message, ok := responseBody["message"]; ok {
+			dataError, _ := c.Data.ResponseDecodeToMap(errors.NewErrMessage(fmt.Sprint(message)))
+
+			return status, dataError, errors.NewErrFound(fmt.Sprint(thingsBoard), fmt.Sprint("GetLatestTimeseries ->", message))
+		}
 	}
 
 	responseBody, err := c.Data.BodyDecodeToMap(resBody)

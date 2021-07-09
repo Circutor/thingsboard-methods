@@ -70,7 +70,7 @@ func (_m *ThingsBoardTelemetryControllerMock) GetAttributeKeys(entityType string
 }
 
 // GetAttributeKeysByScope provides a mock function with given fields: entityType, entityID, scope, token
-func (_m *ThingsBoardTelemetryControllerMock) GetAttributeKeysByScope(entityType string, entityID string, scope string, token string) (int, []interface{}, error) {
+func (_m *ThingsBoardTelemetryControllerMock) GetAttributeKeysByScope(entityType string, entityID string, scope string, token string) (int, map[string]interface{}, error) {
 	ret := _m.Called(entityType, entityID, scope, token)
 
 	var r0 int
@@ -80,12 +80,12 @@ func (_m *ThingsBoardTelemetryControllerMock) GetAttributeKeysByScope(entityType
 		r0 = ret.Get(0).(int)
 	}
 
-	var r1 []interface{}
-	if rf, ok := ret.Get(1).(func(string, string, string, string) []interface{}); ok {
+	var r1 map[string]interface{}
+	if rf, ok := ret.Get(1).(func(string, string, string, string) map[string]interface{}); ok {
 		r1 = rf(entityType, entityID, scope, token)
 	} else {
 		if ret.Get(1) != nil {
-			r1 = ret.Get(1).([]interface{})
+			r1 = ret.Get(1).(map[string]interface{})
 		}
 	}
 
@@ -130,7 +130,7 @@ func (_m *ThingsBoardTelemetryControllerMock) GetAttributes(entityType string, e
 }
 
 // GetAttributesByScope provides a mock function with given fields: entityType, entityID, scope, token, query
-func (_m *ThingsBoardTelemetryControllerMock) GetAttributesByScope(entityType string, entityID string, scope string, token string, query map[string]interface{}) (int, []interface{}, error) {
+func (_m *ThingsBoardTelemetryControllerMock) GetAttributesByScope(entityType string, entityID string, scope string, token string, query map[string]interface{}) (int, map[string]interface{}, error) {
 	ret := _m.Called(entityType, entityID, scope, token, query)
 
 	var r0 int
@@ -140,12 +140,12 @@ func (_m *ThingsBoardTelemetryControllerMock) GetAttributesByScope(entityType st
 		r0 = ret.Get(0).(int)
 	}
 
-	var r1 []interface{}
-	if rf, ok := ret.Get(1).(func(string, string, string, string, map[string]interface{}) []interface{}); ok {
+	var r1 map[string]interface{}
+	if rf, ok := ret.Get(1).(func(string, string, string, string, map[string]interface{}) map[string]interface{}); ok {
 		r1 = rf(entityType, entityID, scope, token, query)
 	} else {
 		if ret.Get(1) != nil {
-			r1 = ret.Get(1).([]interface{})
+			r1 = ret.Get(1).(map[string]interface{})
 		}
 	}
 

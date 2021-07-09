@@ -11,7 +11,7 @@ import (
 
 // GetEntityGroupsByType get all entities from group type.
 func (c *ControllerEntityGroup) GetEntityGroupsByType(groupType, token string) (int, []interface{}, error) {
-	url := c.TB.URLTBServer + groups + "/" + groupType
+	url := c.TB.URLTBServer + groups + groupType
 
 	resBody, status, err := c.Request.CreateNewRequest(http.MethodGet, url, token, nil, nil)
 	if err != nil {
