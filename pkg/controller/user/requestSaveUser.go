@@ -6,38 +6,36 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/circutor/common-library/pkg/data"
 	"github.com/circutor/common-library/pkg/errors"
-	"github.com/circutor/common-library/pkg/request"
 	"github.com/circutor/thingsboard-methods/pkg/core"
 )
 
 func (c *ControllerUser) SaveUser(saveUserBody core.SaveUserBody, token string) (int, map[string]interface{}, error) {
-	body, err := data.BodyEncode(saveUserBody)
+	body, err := c.Data.BodyEncode(saveUserBody)
 	if err != nil {
-		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
+		dataError, _ := c.Data.ResponseDecodeToMap(errors.NewErrMessage(err.Error()))
 
 		return http.StatusInternalServerError, dataError, fmt.Errorf("%w", err)
 	}
 
 	url := c.TB.URLTBServer + user
 
-	resBody, status, err := request.CreateNewRequest(http.MethodPost, url, token, body, nil)
+	resBody, status, err := c.Request.CreateNewRequest(http.MethodPost, url, token, body, nil)
 	if err != nil {
-		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
+		dataError, _ := c.Data.ResponseDecodeToMap(errors.NewErrMessage(err.Error()))
 
 		return status, dataError, fmt.Errorf("%w", err)
 	}
 
-	responseBody, err := data.BodyDecode(resBody)
+	responseBody, err := c.Data.BodyDecodeToMap(resBody)
 	if err != nil {
-		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
+		dataError, _ := c.Data.ResponseDecodeToMap(errors.NewErrMessage(err.Error()))
 
 		return http.StatusInternalServerError, dataError, fmt.Errorf("%w", err)
 	}
 
 	if message, ok := responseBody["message"]; ok {
-		dataError, _ := data.ResponseDecode(errors.NewErrMessage(fmt.Sprint(message)))
+		dataError, _ := c.Data.ResponseDecodeToMap(errors.NewErrMessage(fmt.Sprint(message)))
 
 		return status, dataError, errors.NewErrFound(fmt.Sprint(thingsBoard), fmt.Sprint("SaveUser ->", message))
 	}

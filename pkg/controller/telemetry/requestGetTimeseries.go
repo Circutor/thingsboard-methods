@@ -7,9 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/circutor/common-library/pkg/data"
 	"github.com/circutor/common-library/pkg/errors"
-	"github.com/circutor/common-library/pkg/request"
 )
 
 // GetTimeseries get interval period of values time series.
@@ -17,23 +15,36 @@ func (c *ControllerTelemetry) GetTimeseries(entityType, entityID, token string,
 	query map[string]interface{}) (int, map[string]interface{}, error) {
 	url := c.TB.URLTBServer + telemetry + entityType + "/" + entityID + getTimeseriesValues
 
-	resBody, status, err := request.CreateNewRequest(http.MethodGet, url, token, nil, query)
+	resBody, status, err := c.Request.CreateNewRequest(http.MethodGet, url, token, nil, query)
 	if err != nil {
-		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
+		dataError, _ := c.Data.ResponseDecodeToMap(errors.NewErrMessage(err.Error()))
 
 		return status, dataError, fmt.Errorf("%w", err)
 	}
 
-	if !(status == http.StatusOK || status == http.StatusCreated) {
-		dataError, _ := data.ResponseDecode(errors.NewErrMessage(string(resBody)))
-
-		return status, dataError, errors.NewErrFound(
-			fmt.Sprint(thingsBoard), fmt.Sprint("GetLatestTimeseries ->", string(resBody)))
+	if status == http.StatusForbidden || status == http.StatusNotFound {
+		return status, map[string]interface{}{"message": string(resBody)}, errors.NewErrFound(
+			fmt.Sprint(thingsBoard), fmt.Sprint("GetTimeseries ->", string(resBody)))
 	}
 
-	responseBody, err := data.BodyDecode(resBody)
+	if !(status == http.StatusOK || status == http.StatusCreated) {
+		responseBody, err := c.Data.BodyDecodeToMap(resBody)
+		if err != nil {
+			dataError, _ := c.Data.ResponseDecodeToMap(errors.NewErrMessage(err.Error()))
+
+			return http.StatusInternalServerError, dataError, fmt.Errorf("%w", err)
+		}
+
+		if message, ok := responseBody["message"]; ok {
+			dataError, _ := c.Data.ResponseDecodeToMap(errors.NewErrMessage(fmt.Sprint(message)))
+
+			return status, dataError, errors.NewErrFound(fmt.Sprint(thingsBoard), fmt.Sprint("GetTimeseries ->", message))
+		}
+	}
+
+	responseBody, err := c.Data.BodyDecodeToMap(resBody)
 	if err != nil {
-		dataError, _ := data.ResponseDecode(errors.NewErrMessage(err.Error()))
+		dataError, _ := c.Data.ResponseDecodeToMap(errors.NewErrMessage(err.Error()))
 
 		return http.StatusInternalServerError, dataError, fmt.Errorf("%w", err)
 	}

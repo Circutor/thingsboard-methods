@@ -3,84 +3,64 @@
 package auth_test
 
 import (
-	"encoding/json"
 	"net/http"
 	"testing"
 
+	dataCall "github.com/circutor/common-library/pkg/data"
+	dataMock "github.com/circutor/common-library/pkg/data/mocks"
+	"github.com/circutor/common-library/pkg/errors"
+	requestMock "github.com/circutor/common-library/pkg/request/mocks"
 	"github.com/circutor/thingsboard-methods/pkg/controller/auth"
 	"github.com/circutor/thingsboard-methods/pkg/core"
 	"github.com/jbrodriguez/mlog"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
-func TestLoginSuccess(t *testing.T) {
+func TestFailBodyEncodeLogin(t *testing.T) {
 	t.Parallel()
 
 	mlog.StartEx(mlog.LevelTrace, "", 0, 0)
 
-	userLogin := core.LoginBody{
-		Username: cfg.Username,
-		Password: cfg.Password,
-	}
+	body := core.NewLoginBody("user@circutor.com", "123456")
 
-	controller := auth.NewControllerAuth(cfg.URL, cfg.Username, cfg.Password)
+	data := new(dataMock.InterfaceDataMock)
 
-	status, _, err := controller.Login(userLogin)
-	require.NoError(t, err)
+	data.On("BodyEncode", body).
+		Return(nil, errors.NewErrFound("error in encode request body"))
+	data.On("ResponseDecodeToMap", errors.NewErrMessage("error in encode request body")).
+		Return(map[string]interface{}{"message": "error in encode request body"}, nil)
 
-	assert.Equal(t, http.StatusOK, status)
+	controller := auth.NewControllerAuthMock("/", "", "", data, nil)
+
+	status, _, _ := controller.Login(body)
+	assert.Equal(t, http.StatusInternalServerError, status)
 }
 
-func TestLoginFailed(t *testing.T) {
+func TestFailRequestLogin(t *testing.T) {
 	t.Parallel()
 
 	mlog.StartEx(mlog.LevelTrace, "", 0, 0)
 
-	testCases := []struct {
-		name     string
-		body     core.LoginBody
-		status   int
-		respBody map[string]interface{}
-	}{
-		{
-			name: "Authentication failed",
-			body: core.LoginBody{
-				Username: cfg.Username,
-				Password: "",
-			},
-			status:   401,
-			respBody: map[string]interface{}{"message": "Authentication failed"},
-		},
-		{
-			name: "Invalid username or password",
-			body: core.LoginBody{
-				Username: cfg.Username,
-				Password: "invalid_password",
-			},
-			status:   401,
-			respBody: map[string]interface{}{"message": "Invalid username or password"},
-		},
-	}
+	body := core.NewLoginBody("user@circutor.com", "123456")
 
-	for _, tc := range testCases {
-		tc := tc
+	d := dataCall.NewData()
+	respBody, _ := d.BodyEncode(body)
+	query := map[string]interface{}(nil)
 
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
+	data := new(dataMock.InterfaceDataMock)
 
-			respBodyByte, err := json.Marshal(tc.respBody)
-			require.NoError(t, err)
+	data.On("BodyEncode", body).
+		Return(respBody, nil)
+	data.On("ResponseDecodeToMap", errors.NewErrMessage("error in create request")).
+		Return(map[string]interface{}{"message": "error in encode request body"}, nil)
 
-			controller := auth.NewControllerAuth(cfg.URL, cfg.Username, cfg.Password)
+	request := new(requestMock.InterfaceRequestMock)
 
-			status, message, _ := controller.Login(tc.body)
+	request.On("CreateNewRequest", "POST", "/api/auth/login", "", respBody, query).
+		Return(nil, 500, errors.NewErrFound("error in create request"))
 
-			messageError, err := json.Marshal(message)
-			require.NoError(t, err)
+	controller := auth.NewControllerAuthMock("/", "", "", data, request)
 
-			assert.Equal(t, tc.status, status)
-			assert.Equal(t, string(respBodyByte), string(messageError))
-		})
-	}
+	status, _, _ := controller.Login(body)
+	assert.Equal(t, http.StatusInternalServerError, status)
 }

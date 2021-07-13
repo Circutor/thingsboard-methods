@@ -2,7 +2,13 @@
 
 package user
 
-import "github.com/circutor/thingsboard-methods/pkg/core"
+import (
+	"github.com/circutor/common-library/pkg/data"
+	dataMock "github.com/circutor/common-library/pkg/data/mocks"
+	"github.com/circutor/common-library/pkg/request"
+	requestMock "github.com/circutor/common-library/pkg/request/mocks"
+	"github.com/circutor/thingsboard-methods/pkg/core"
+)
 
 const (
 	thingsBoard = "ThingsBoard call: %s"
@@ -19,14 +25,30 @@ type ThingsBoardUserController interface {
 //go:generate mockery --name ThingsBoardUserController --structname ThingsBoardUserControllerMock --filename ThingsBoardUserControllerMock.go
 
 type ControllerUser struct {
-	TB core.ThingsBoard
+	TB      core.ThingsBoard
+	Data    data.InterfaceData
+	Request request.InterfaceRequest
 }
 
 // NewControllerUser creates a new ThingsBoardUserController.
 func NewControllerUser(urlServer, userName, userPassword string) ControllerUser {
-	tb := ControllerUser{
-		TB: core.NewThingsBoard(urlServer, userName, userPassword),
-	}
+	dataLib := data.NewData()
+	requestLib := request.NewRequest()
 
-	return tb
+	return ControllerUser{
+		TB:      core.NewThingsBoard(urlServer, userName, userPassword),
+		Data:    &dataLib,
+		Request: &requestLib,
+	}
+}
+
+//nolint:interfacer
+// NewControllerUserMock creates a new ThingsBoardUserController.
+func NewControllerUserMock(urlServer, userName, userPassword string,
+	data *dataMock.InterfaceDataMock, request *requestMock.InterfaceRequestMock) ControllerUser {
+	return ControllerUser{
+		TB:      core.NewThingsBoard(urlServer, userName, userPassword),
+		Data:    data,
+		Request: request,
+	}
 }
