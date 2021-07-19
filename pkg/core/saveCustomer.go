@@ -22,11 +22,12 @@ type additionalInfoRequest struct {
 	CompanyName     string `json:"companyName"`
 	CompanyActivity string `json:"companyActivity"`
 	CompanyPosition string `json:"companyPosition"`
+	Language        string `json:"language"`
 }
 
 // NewSaveCustomerBody create a new saveCustomerRequest for a Login.
 func NewSaveCustomerBody(entityType, id, country, state, phone, name, email, title,
-	companyName, companyActivity, companyPosition string) SaveCustomerBody {
+	companyName, companyActivity, companyPosition, language string) SaveCustomerBody {
 	saveCustomerBody := SaveCustomerBody{
 		ID: EntityID{
 			EntityType: entityType,
@@ -43,6 +44,7 @@ func NewSaveCustomerBody(entityType, id, country, state, phone, name, email, tit
 			CompanyName:     companyName,
 			CompanyActivity: companyActivity,
 			CompanyPosition: companyPosition,
+			Language:        language,
 		},
 	}
 
