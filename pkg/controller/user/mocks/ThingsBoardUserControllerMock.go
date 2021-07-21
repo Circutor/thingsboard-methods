@@ -12,6 +12,36 @@ type ThingsBoardUserControllerMock struct {
 	mock.Mock
 }
 
+// GetUserUsers provides a mock function with given fields: token, query
+func (_m *ThingsBoardUserControllerMock) GetUserUsers(token string, query map[string]interface{}) (int, map[string]interface{}, error) {
+	ret := _m.Called(token, query)
+
+	var r0 int
+	if rf, ok := ret.Get(0).(func(string, map[string]interface{}) int); ok {
+		r0 = rf(token, query)
+	} else {
+		r0 = ret.Get(0).(int)
+	}
+
+	var r1 map[string]interface{}
+	if rf, ok := ret.Get(1).(func(string, map[string]interface{}) map[string]interface{}); ok {
+		r1 = rf(token, query)
+	} else {
+		if ret.Get(1) != nil {
+			r1 = ret.Get(1).(map[string]interface{})
+		}
+	}
+
+	var r2 error
+	if rf, ok := ret.Get(2).(func(string, map[string]interface{}) error); ok {
+		r2 = rf(token, query)
+	} else {
+		r2 = ret.Error(2)
+	}
+
+	return r0, r1, r2
+}
+
 // SaveUser provides a mock function with given fields: saveUserBody, token
 func (_m *ThingsBoardUserControllerMock) SaveUser(saveUserBody core.SaveUserBody, token string) (int, map[string]interface{}, error) {
 	ret := _m.Called(saveUserBody, token)

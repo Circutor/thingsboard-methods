@@ -9,8 +9,8 @@ import (
 	"github.com/circutor/common-library/pkg/errors"
 )
 
-// SaveEntityAttributesV2 create entity attributes witch scope(server, hared or client).
-func (c *ControllerTelemetry) SaveEntityAttributesV2(entityType, entityID, scope, token string,
+// SaveEntityAttributesV1 create entity attributes into specific scope(server, shared or client).
+func (c *ControllerTelemetry) SaveEntityAttributesV1(entityType, entityID, scope, token string,
 	attributesBody map[string]interface{}) (int, map[string]interface{}, error) {
 	body, err := c.Data.BodyEncode(attributesBody)
 	if err != nil {
@@ -19,7 +19,7 @@ func (c *ControllerTelemetry) SaveEntityAttributesV2(entityType, entityID, scope
 		return http.StatusInternalServerError, dataError, fmt.Errorf("%w", err)
 	}
 
-	url := c.TB.URLTBServer + telemetry + entityType + "/" + entityID + saveAttributes + scope
+	url := c.TB.URLTBServer + telemetry + entityType + "/" + entityID + "/" + scope
 
 	resBody, status, err := c.Request.CreateNewRequest(http.MethodPost, url, token, body, nil)
 	if err != nil {
@@ -40,7 +40,7 @@ func (c *ControllerTelemetry) SaveEntityAttributesV2(entityType, entityID, scope
 			dataError, _ := c.Data.ResponseDecodeToMap(errors.NewErrMessage(fmt.Sprint(message)))
 
 			return status, dataError, errors.NewErrFound(
-				fmt.Sprint(thingsBoard), fmt.Sprint("SaveEntityAttributesV2 ->", message))
+				fmt.Sprint(thingsBoard), fmt.Sprint("SaveEntityAttributesV1 ->", message))
 		}
 	}
 

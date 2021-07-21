@@ -10,7 +10,7 @@ type ThingsBoardEntityGroupControllerMock struct {
 }
 
 // GetEntityGroupsByType provides a mock function with given fields: groupType, token
-func (_m *ThingsBoardEntityGroupControllerMock) GetEntityGroupsByType(groupType string, token string) (int, []interface{}, error) {
+func (_m *ThingsBoardEntityGroupControllerMock) GetEntityGroupsByType(groupType string, token string) (int, map[string]interface{}, error) {
 	ret := _m.Called(groupType, token)
 
 	var r0 int
@@ -20,12 +20,12 @@ func (_m *ThingsBoardEntityGroupControllerMock) GetEntityGroupsByType(groupType 
 		r0 = ret.Get(0).(int)
 	}
 
-	var r1 []interface{}
-	if rf, ok := ret.Get(1).(func(string, string) []interface{}); ok {
+	var r1 map[string]interface{}
+	if rf, ok := ret.Get(1).(func(string, string) map[string]interface{}); ok {
 		r1 = rf(groupType, token)
 	} else {
 		if ret.Get(1) != nil {
-			r1 = ret.Get(1).([]interface{})
+			r1 = ret.Get(1).(map[string]interface{})
 		}
 	}
 

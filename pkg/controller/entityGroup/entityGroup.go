@@ -18,7 +18,7 @@ const (
 
 // ThingsBoardEntityGroupController methods call API ThingsBoard.
 type ThingsBoardEntityGroupController interface {
-	GetEntityGroupsByType(groupType, token string) (int, []interface{}, error)
+	GetEntityGroupsByType(groupType, token string) (int, map[string]interface{}, error)
 }
 
 //nolint:lll

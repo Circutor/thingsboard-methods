@@ -249,8 +249,8 @@ func (_m *ThingsBoardTelemetryControllerMock) SaveDeviceAttributes(deviceID stri
 	return r0, r1, r2
 }
 
-// SaveEntityAttributesV2 provides a mock function with given fields: entityType, entityID, scope, token, attributesBody
-func (_m *ThingsBoardTelemetryControllerMock) SaveEntityAttributesV2(entityType string, entityID string, scope string, token string, attributesBody map[string]interface{}) (int, []interface{}, error) {
+// SaveEntityAttributesV1 provides a mock function with given fields: entityType, entityID, scope, token, attributesBody
+func (_m *ThingsBoardTelemetryControllerMock) SaveEntityAttributesV1(entityType string, entityID string, scope string, token string, attributesBody map[string]interface{}) (int, map[string]interface{}, error) {
 	ret := _m.Called(entityType, entityID, scope, token, attributesBody)
 
 	var r0 int
@@ -260,12 +260,42 @@ func (_m *ThingsBoardTelemetryControllerMock) SaveEntityAttributesV2(entityType 
 		r0 = ret.Get(0).(int)
 	}
 
-	var r1 []interface{}
-	if rf, ok := ret.Get(1).(func(string, string, string, string, map[string]interface{}) []interface{}); ok {
+	var r1 map[string]interface{}
+	if rf, ok := ret.Get(1).(func(string, string, string, string, map[string]interface{}) map[string]interface{}); ok {
 		r1 = rf(entityType, entityID, scope, token, attributesBody)
 	} else {
 		if ret.Get(1) != nil {
-			r1 = ret.Get(1).([]interface{})
+			r1 = ret.Get(1).(map[string]interface{})
+		}
+	}
+
+	var r2 error
+	if rf, ok := ret.Get(2).(func(string, string, string, string, map[string]interface{}) error); ok {
+		r2 = rf(entityType, entityID, scope, token, attributesBody)
+	} else {
+		r2 = ret.Error(2)
+	}
+
+	return r0, r1, r2
+}
+
+// SaveEntityAttributesV2 provides a mock function with given fields: entityType, entityID, scope, token, attributesBody
+func (_m *ThingsBoardTelemetryControllerMock) SaveEntityAttributesV2(entityType string, entityID string, scope string, token string, attributesBody map[string]interface{}) (int, map[string]interface{}, error) {
+	ret := _m.Called(entityType, entityID, scope, token, attributesBody)
+
+	var r0 int
+	if rf, ok := ret.Get(0).(func(string, string, string, string, map[string]interface{}) int); ok {
+		r0 = rf(entityType, entityID, scope, token, attributesBody)
+	} else {
+		r0 = ret.Get(0).(int)
+	}
+
+	var r1 map[string]interface{}
+	if rf, ok := ret.Get(1).(func(string, string, string, string, map[string]interface{}) map[string]interface{}); ok {
+		r1 = rf(entityType, entityID, scope, token, attributesBody)
+	} else {
+		if ret.Get(1) != nil {
+			r1 = ret.Get(1).(map[string]interface{})
 		}
 	}
 

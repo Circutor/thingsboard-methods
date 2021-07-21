@@ -5,7 +5,7 @@ module github.com/circutor/thingsboard-methods
 go 1.15
 
 require (
-	github.com/circutor/common-library v0.0.0-20210608094519-afd3033e2e17
+	github.com/circutor/common-library v0.0.0-20210713112836-1ce1b4d7ef7d
 	github.com/jbrodriguez/mlog v0.0.0-20180805173533-cbd5ae8e9c53
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/stretchr/objx v0.3.0 // indirect
