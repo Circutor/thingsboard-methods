@@ -4,7 +4,6 @@ package core
 
 import (
 	"strings"
-	"time"
 )
 
 // CreateDeviceBody body for request createDevice.
@@ -16,9 +15,9 @@ type CreateDeviceBody struct {
 }
 
 // NewCreateDeviceBody create a new CreateDeviceBody for a CreateDevice.
-func NewCreateDeviceBody(serialID, deviceType string) CreateDeviceBody {
+func NewCreateDeviceBody(serialID, deviceType string, createTime int64) CreateDeviceBody {
 	createDeviceBody := CreateDeviceBody{
-		CreatedTime: time.Now().UnixNano() / int64(time.Millisecond),
+		CreatedTime: createTime,
 		Label:       strings.ToUpper(deviceType),
 		Name:        serialID + "_" + strings.ToUpper(deviceType),
 		Type:        strings.ToUpper(deviceType),

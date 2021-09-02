@@ -2,8 +2,6 @@
 
 package core
 
-import "time"
-
 // SaveUserBody body for request saveUser.
 type SaveUserBody struct {
 	UserID      EntityID `json:"id"`
@@ -18,7 +16,7 @@ type SaveUserBody struct {
 
 // NewSaveUserBody creates a new SaveUserBody for a saveUser.
 func NewSaveUserBody(userID, userType, firstName, lastName, email, name, authority,
-	customerID, customerType string) SaveUserBody {
+	customerID, customerType string, createTime int64) SaveUserBody {
 	saveUserBody := SaveUserBody{
 		UserID: EntityID{
 			EntityType: userType,
@@ -29,7 +27,7 @@ func NewSaveUserBody(userID, userType, firstName, lastName, email, name, authori
 		Email:       email,
 		Name:        name,
 		Authority:   authority,
-		CreatedTime: time.Now().UnixNano() / int64(time.Millisecond),
+		CreatedTime: createTime,
 		CustomerID: EntityID{
 			EntityType: customerType,
 			ID:         customerID,

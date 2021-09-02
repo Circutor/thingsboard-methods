@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	dataCall "github.com/circutor/common-library/pkg/data"
-
 	dataMock "github.com/circutor/common-library/pkg/data/mocks"
 	"github.com/circutor/common-library/pkg/errors"
 	requestMock "github.com/circutor/common-library/pkg/request/mocks"
@@ -16,12 +15,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestFailBodyEncodeSaveEntityAttributesV1(t *testing.T) {
+func TestFailBodyEncodeSaveEntityAttributesV2(t *testing.T) {
 	t.Parallel()
 
 	mlog.StartEx(mlog.LevelTrace, "", 0, 0)
 
 	// Send Telemetry mock
+	entityType := "USER"
+	entityID := "00000000-0000-0000-0000-000000000000"
+	scope := "SERVER_SCOPE"
 	attrBody := map[string]interface{}{
 		"attribute1": "A1",
 	}
@@ -35,17 +37,20 @@ func TestFailBodyEncodeSaveEntityAttributesV1(t *testing.T) {
 
 	controller := telemetry.NewControllerTelemetryMock("/", "", "", data, nil)
 
-	status, _, _ := controller.SaveEntityAttributesV1(
-		"USER", "00000000-0000-0000-0000-000000000000", "SERVER_SCOPE", "Bearer token_value", attrBody)
+	status, _, _ := controller.SaveEntityAttributesV2(
+		entityType, entityID, scope, "Bearer token_value", attrBody)
 	assert.Equal(t, http.StatusInternalServerError, status)
 }
 
-func TestFailRequestSaveEntityAttributesV1(t *testing.T) {
+func TestFailRequestSaveEntityAttributesV2(t *testing.T) {
 	t.Parallel()
 
 	mlog.StartEx(mlog.LevelTrace, "", 0, 0)
 
 	// Send Telemetry mock
+	entityType := "USER"
+	entityID := "00000000-0000-0000-0000-000000000000"
+	scope := "SERVER_SCOPE"
 	attrBody := map[string]interface{}{
 		"attribute1": "A1",
 	}
@@ -63,14 +68,12 @@ func TestFailRequestSaveEntityAttributesV1(t *testing.T) {
 
 	request := new(requestMock.InterfaceRequestMock)
 
-	URL := "/api/plugins/telemetry/" + "USER" + "/" + "00000000-0000-0000-0000-000000000000" + "/" + "SERVER_SCOPE"
-
-	request.On("CreateNewRequest", "POST", URL, "Bearer token_value", respBody, query).
+	request.On("CreateNewRequest", "POST",
+		"/api/plugins/telemetry/"+entityType+"/"+entityID+"/attributes/"+scope, "Bearer token_value", respBody, query).
 		Return(nil, 500, errors.NewErrFound("error in create request"))
 
 	controller := telemetry.NewControllerTelemetryMock("/", "", "", data, request)
 
-	status, _, _ := controller.SaveEntityAttributesV1(
-		"USER", "00000000-0000-0000-0000-000000000000", "SERVER_SCOPE", "Bearer token_value", attrBody)
+	status, _, _ := controller.SaveEntityAttributesV2(entityType, entityID, scope, "Bearer token_value", attrBody)
 	assert.Equal(t, http.StatusInternalServerError, status)
 }

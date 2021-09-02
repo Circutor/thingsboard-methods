@@ -2,8 +2,6 @@
 
 package core
 
-import "time"
-
 // SaveCustomerBody body for request saveCustomer.
 type SaveCustomerBody struct {
 	ID             EntityID              `json:"id"`
@@ -27,7 +25,7 @@ type additionalInfoRequest struct {
 
 // NewSaveCustomerBody create a new saveCustomerRequest for a Login.
 func NewSaveCustomerBody(entityType, id, country, state, phone, name, email, title,
-	companyName, companyActivity, companyPosition, language string) SaveCustomerBody {
+	companyName, companyActivity, companyPosition, language string, createTime int64) SaveCustomerBody {
 	saveCustomerBody := SaveCustomerBody{
 		ID: EntityID{
 			EntityType: entityType,
@@ -39,7 +37,7 @@ func NewSaveCustomerBody(entityType, id, country, state, phone, name, email, tit
 		Name:        name,
 		Email:       email,
 		Title:       title,
-		CreatedTime: time.Now().UnixNano() / int64(time.Millisecond),
+		CreatedTime: createTime,
 		AdditionalInfo: additionalInfoRequest{
 			CompanyName:     companyName,
 			CompanyActivity: companyActivity,
