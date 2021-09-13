@@ -32,7 +32,7 @@ type ThingsBoardTelemetryController interface {
 		attributesBody map[string]interface{}) (int, map[string]interface{}, error)
 	GetAttributeKeys(entityType, entityID, token string) (int, []interface{}, error)
 	GetAttributeKeysByScope(entityType, entityID, scope, token string) (int, map[string]interface{}, error)
-	GetAttributes(entityType, entityID, token string, query map[string]interface{}) (int, []interface{}, error)
+	GetAttributes(entityType, entityID, token string, query map[string]interface{}) (int, map[string]interface{}, error)
 	GetAttributesByScope(entityType, entityID, scope, token string,
 		query map[string]interface{}) (int, map[string]interface{}, error)
 	DeleteEntityAttributes(entityType, entityID, scope, token string,
