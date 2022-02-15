@@ -21,6 +21,7 @@ type ThingsBoardUserController interface {
 	SaveUser(saveUserBody core.SaveUserBody, token string) (int, map[string]interface{}, error)
 	GetUserByID(userID, token string) (int, map[string]interface{}, error)
 	GetUserUsers(token string, query map[string]interface{}) (int, map[string]interface{}, error)
+	GetUserToken(userID, token string) (int, map[string]interface{}, error)
 }
 
 //nolint:lll
