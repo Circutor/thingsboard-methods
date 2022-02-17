@@ -22,6 +22,7 @@ type ThingsBoardUserController interface {
 	GetUserByID(userID, token string) (int, map[string]interface{}, error)
 	GetUserUsers(token string, query map[string]interface{}) (int, map[string]interface{}, error)
 	GetUserToken(userID, token string) (int, map[string]interface{}, error)
+	GetUsersByEntityGroupID(entityGroupID, token string, query map[string]interface{}) (int, map[string]interface{}, error)
 }
 
 //nolint:lll
