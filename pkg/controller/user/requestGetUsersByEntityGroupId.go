@@ -11,7 +11,7 @@ import (
 
 func (c *ControllerUser) GetUsersByEntityGroupID(entityGroupID, token string,
 	query map[string]interface{}) (int, map[string]interface{}, error) {
-	url := c.TB.URLTBServer + "api/entityGroup" + entityGroupID + "/users"
+	url := c.TB.URLTBServer + "api/entityGroup/" + entityGroupID + "/users"
 
 	resBody, status, err := c.Request.CreateNewRequest(http.MethodGet, url, token, nil, query)
 	if err != nil {
